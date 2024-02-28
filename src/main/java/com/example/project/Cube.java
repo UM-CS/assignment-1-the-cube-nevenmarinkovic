@@ -99,17 +99,26 @@ public class Cube
 
 	}
 
+	public static void printCube(Face[] faces)
+	{
+		for(Face face: faces)
+		{
+			face.printFace();
+			System.out.println();
+		}
+	}
+
 
 	public static void main(String[] args) {
 		Face front = new Face("Front","w");
-		front.printFace();
-		System.out.println();
+		Face left = new Face("Left", "g");
+		Face right = new Face("Right","b");
+		Face back = new Face("Back", "y");
+		Face top = new Face("Top","o");
+		Face bottom = new Face("Bottom", "r");
+		Face[] faces = {front, left, right, back, top, bottom};
+		printCube(faces);
 
-		//Simulate a top rotate. The top of white should be changed to the top of green
-		String[] topFront = front.getSide("L");
-		String[] toAdd = {"o", "o", "o"};
-		front.setSide("L", toAdd);
-		front.printFace();
 	}
 
 
