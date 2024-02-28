@@ -1,128 +1,121 @@
 package com.example.project;
 
-public class Cube {
+public class Cube
+{
 
-	//A Cube in the correct format for the ultimate submission
-	static String[][] myCube = 
-				    {
-				        {
-				            "r", "r", "r",
-				            "r", "r", "r",
-				            "r", "r", "r",
-				        },	{
-				            "b", "b", "b",
-				            "b", "b", "b",
-				            "b", "b", "b",
-				        },	{
-				            "o", "o", "o",
-				            "o", "o", "o",
-				            "o", "o", "o",
-				        },	{
-				            "g", "g", "g", 
-				            "g", "g", "g",
-				            "g", "g", "g",
-				        },	{
-				            "y", "y", "y",
-				            "y", "y", "y",
-				            "y", "y", "y",
-				        },	{
-				            "w", "w", "w",
-				            "w", "w", "w",
-				            "w", "w", "w",
-				        },
-				    };
-	
-						
-	//A Cube with numbers to test rotation.
-	static String[][] numCube = 
-				    {
-				        {
-				            "r1", "r2", "r3",
-				            "r4", "r5", "r6",
-				            "r7", "r8", "r9",
-				        },	{
-				            "b1", "b2", "b3",
-				            "b4", "b5", "b6",
-				            "b7", "b8", "b9",
-				        },	{
-				            "o1", "o2", "o3",
-				            "o4", "o5", "o6",
-				            "o7", "o8", "o9",
-				        },	{
-				            "g1", "g2", "g3", 
-				            "g4", "g5", "g6",
-				            "g7", "g8", "g9",
-				        },	{
-				            "y1", "y2", "y3",
-				            "y4", "y5", "y6",
-				            "y7", "y8", "y9",
-				        },	{
-				            "w1", "w2", "w3",
-				            "w4", "w5", "w6",
-				            "w7", "w8", "w9",
-				        },
-				    };
-	
+	public static class Face{
+		private String position;
+		private String[] cubes = new String[9];
 
-	static void rotateFace(String[][] Cube, int face){
-	        String Temp = null;
-	        Temp = Cube[face][0];
-	        Cube[face][0] = Cube[face][6];
-	        Cube[face][6] = Cube[face][8];
-	        Cube[face][8] = Cube[face][2];
-	        Cube[face][2] = Temp;
-	        Temp = Cube[face][1];
-	        Cube[face][1] = Cube[face][3];
-	        Cube[face][3] = Cube[face][7];
-	        Cube[face][7] = Cube[face][5];
-	        Cube[face][5] = Temp;
-
-		/*
-		 * 		1 -> 2 -> 3
-		 * 		/\       \/
-		 * 		4    5    6
-		 * 		/\       \/
-		 * 		7 <- 8 <- 9
-		 * 
-		 * 	 Clockwise Rotation
-		 *
-		 */
-
-	} 
-
-	static void printCube(String[][] theCube) {
-		for (int x = 0; x < 6; x++){
-	        	int z = -1;
-	        	for (int y = 0; y < 3; y++){
-		                z++;
-		                System.out.print(theCube[x][z]);
-		                System.out.print("|"); 
-		                z++;
-		                System.out.print(theCube[x][z]);
-		                System.out.print("|");  
-		                z++;
-		                System.out.print(theCube[x][z]);
-		                System.out.println("");    
-	                
-	            	}
-	        	System.out.println("");    
+		//Constructor for the face object. Position is the face (front, left, back, etc.) and val is the initial color val for that face (w, y, r, etc.)
+		public Face(String pos, String val)
+		{
+			position = pos;
+			//Loop through and assign each cube of this face to be whatever val is
+			for(int i = 0; i < cubes.length; i++)
+			{
+				cubes[i] = val;
+			}
 		}
+
+		public void printFace()
+		{
+			int count = 0;
+			for(int i = 0; i < cubes.length; i++)
+			{
+				if(count == 2)
+				{
+					System.out.println(cubes[i]);
+					count = 0;
+				}
+				else
+				{
+					System.out.print(cubes[i] + "|");
+					count ++;
+				}
+			}
+		}
+
+		public String[] getSide(String side)
+		{
+			String[] toReturn = new String[3];
+			switch(side)
+			{
+				case "T":
+					toReturn[0] = cubes[0];
+					toReturn[1] = cubes[1];
+					toReturn[2] = cubes[2];
+					break;
+				case "L":
+					toReturn[0] = cubes[0];
+					toReturn[1] = cubes[3];
+					toReturn[2] = cubes[6];
+					break;
+				case "R":
+					toReturn[0] = cubes[2];
+					toReturn[1] = cubes[5];
+					toReturn[2] = cubes[8];
+					break;
+				case "B":
+					toReturn[0] = cubes[6];
+					toReturn[1] = cubes[7];
+					toReturn[2] = cubes[8];
+					break;
+				default:
+				System.out.println("Something went wrong...");
+					
+			}
+			return toReturn;
+		}
+
+		public void setSide(String side, String[] toAdd)
+		{
+			switch(side)
+			{
+				case "T":
+					cubes[0] = toAdd[0];
+					cubes[1] = toAdd[1];
+					cubes[2] = toAdd[2];
+					break;
+				case "L":
+					cubes[0] = toAdd[0];
+					cubes[3] = toAdd[1];
+					cubes[6] = toAdd[2];
+					break;
+				case "R":
+					cubes[0] = toAdd[2];
+					cubes[3] = toAdd[5];
+					cubes[6] = toAdd[8];
+					break;
+				case "B":
+					cubes[0] = toAdd[6];
+					cubes[3] = toAdd[7];
+					cubes[6] = toAdd[8];
+					break;
+				default:
+					System.out.println("Something went wrong...");
+			}
+		}
+
 	}
 
-	
-	public static void main(final String[] args) {
 
-		/*
-		 * Uncomment the lines down below to begin testing the starter code.
-		 */
+	public static void main(String[] args) {
+		Face front = new Face("Front","w");
+		front.printFace();
+		System.out.println();
 
-		// printCube(myCube);
-
-		// rotateFace(numCube, 0);
-
-		// printCube(numCube);
-	
+		//Simulate a top rotate. The top of white should be changed to the top of green
+		String[] topFront = front.getSide("L");
+		String[] toAdd = {"o", "o", "o"};
+		front.setSide("L", toAdd);
+		front.printFace();
 	}
+
+
+
+
+
+
 
 }
-
