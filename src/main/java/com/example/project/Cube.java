@@ -97,27 +97,59 @@ public class Cube
 			}
 		}
 
+		/*
+		public void rotateFace(Face F, boolean clockwise)
+		{
+			if(clockwise)
+			{
+				String[] sides = 
+			}
+		}
+		*/
+
 	}
 
-	public static void printCube(Face[] faces)
+	public static class RubiksCube
 	{
-		for(Face face: faces)
+		private Face front;
+		private Face left;
+		private Face right;
+		private Face back;
+		private Face top;
+		private Face bottom;
+		private Face[] faces = new Face[6];
+
+		public RubiksCube()
 		{
-			face.printFace();
-			System.out.println();
+			front = new Face("Front","w");
+			left = new Face("Left", "g");
+			right = new Face("Right","b");
+			back = new Face("Back", "y");
+			top = new Face("Top","o");
+			bottom = new Face("Bottom", "r");
+			faces[0] = front;
+			faces[1] = left;
+			faces[2] = right;
+			faces[3] = back;
+			faces[4] = top;
+			faces[5] = bottom;
+
+		}
+
+		public void printCube()
+		{
+			for(Face face: faces)
+			{
+				face.printFace();
+				System.out.println();
+			}
 		}
 	}
 
 
 	public static void main(String[] args) {
-		Face front = new Face("Front","w");
-		Face left = new Face("Left", "g");
-		Face right = new Face("Right","b");
-		Face back = new Face("Back", "y");
-		Face top = new Face("Top","o");
-		Face bottom = new Face("Bottom", "r");
-		Face[] faces = {front, left, right, back, top, bottom};
-		printCube(faces);
+		RubiksCube cube = new RubiksCube();
+		cube.printCube();
 
 	}
 
