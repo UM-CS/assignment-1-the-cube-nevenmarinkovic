@@ -144,6 +144,8 @@ public class Cube
 				System.out.println();
 			}
 		}
+
+		//Add some get/set functions for each face
 	}
 
 
