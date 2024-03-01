@@ -336,9 +336,16 @@ public class Cube
 				bottom.setSide("T", right.getSide("L"), false);
 				right.setSide("L", top.getSide("B"), true);
 				top.setSide("B", rightOfLeft, false);
-				
-
 				rotateFace(front, true);
+			}
+			else if(move == "f'")
+			{
+				String[] rightOfLeft = left.getSide("R");
+				left.setSide("R", top.getSide("B"), false);
+				top.setSide("B", right.getSide("L"), true);
+				right.setSide("L",bottom.getSide("T"), false);
+				bottom.setSide("T", rightOfLeft, true);
+				rotateFace(front, false);
 			}
 			else if (move == "b")
 			{
@@ -349,6 +356,19 @@ public class Cube
 				top.setSide("T", rightOfRight, true);
 				
 				rotateFace(back, true);
+			}
+			else if(move == "b'")
+			{
+				String[] rightOfRight = right.getSide("R");
+				right.setSide("R", top.getSide("T"), true);
+				top.setSide("T", left.getSide("L"), false);
+				left.setSide("L", bottom.getSide("B"), true);
+				bottom.setSide("B", rightOfRight, false);
+				rotateFace(back, false);
+			}
+			else
+			{
+				System.out.println("\nAn incorrect move has been entered...\n");
 			}
 		
 
@@ -365,10 +385,10 @@ public class Cube
 		//cube.move("l'");
 		//cube.printCube();
 		//System.out.println("-----------------------------------------------------------");
-		cube.move("l");
+		cube.move("b'");
 		//cube.printCube();
 		System.out.println("-----------------------------------------------------------");
-		cube.move("l'");
+		cube.move("u");
 		cube.printCube();
 
 
