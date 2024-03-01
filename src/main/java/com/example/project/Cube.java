@@ -1,6 +1,7 @@
 package com.example.project;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Cube
 {
@@ -16,13 +17,13 @@ public class Cube
 			//Loop through and assign each cube of this face to be whatever val is
 			for(int i = 0; i < cubes.length; i++)
 			{
-				cubes[i] = val + i;
+				cubes[i] = val;
+				//cubes[i] = val + i //Utilize if i need to see the numbers again
 			}
 		}
 
 		public void printFace()
 		{
-			System.out.println(position);
 			int count = 0;
 			for(int i = 0; i < cubes.length; i++)
 			{
@@ -132,30 +133,6 @@ public class Cube
 			
 		}
 
-		//If the rotation is clockwise, left side -> top side OR right side -> bottom side (top[0] = left [2], top[1] = left[1], top[2] = left[0])
-		//if the rotation is counterclockwise, top side -> left side OR bottom side -> right side (left[0] = top[2], left[1] = top[1], left[2] = top[0])
-		private void rotateSetSide(String side, String[] add, boolean clockwise)
-		{
-			switch(side)
-			{
-				case "T":
-					if(clockwise)
-					{
-						cubes[0] = add[2];
-						cubes[1] = add[1];
-						cubes[2] = add[0];
-					}
-					else
-					{
-						cubes[0] = add[0];
-						cubes[1] = add[1];
-						cubes[2] = add[2];
-					}
-					
-			}
-		}
-
-
 	}
 
 	public static class RubiksCube
@@ -191,28 +168,14 @@ public class Cube
 			String [] left = f.getSide("L");
 			String [] right = f.getSide("R");
 			String [] bottom = f.getSide("B");
-			/*
-			System.out.println("Top Cubes: " + top[0] + top[1] + top[2]);
-			System.out.println("Left Cubes: " + left[0]+ left[1] + left[2]);
-			System.out.println("Right Cubes: " + right[0] + right[1] + right[2]);
-			System.out.println("Bottom Cubes: " + bottom[0] + bottom[1] + bottom[2]);
-			*/
+
 			if(clockwise)
 			{
 				f.setSide("T", left, false);
 				f.setSide("R", top, true);
 				f.setSide("B", right, false);
 				f.setSide("L", bottom, true);
-				/* 
-				String [] newTop = f.getSide("T");
-				String [] newLeft = f.getSide("L");
-				String [] newRight = f.getSide("R");
-				String [] newBottom = f.getSide("B");
-				System.out.println("Top Cubes: " + newTop[0] + newTop[1] + newTop[2]);
-				System.out.println("Left Cubes: " + newLeft[0]+ newLeft[1] + newLeft[2]);
-				System.out.println("Right Cubes: " + newRight[0] + newRight[1] + newRight[2]);
-				System.out.println("Bottom Cubes: " + newBottom[0] + newBottom[1] + newBottom[2]);
-				*/
+
 			}
 			else
 			{
@@ -226,6 +189,7 @@ public class Cube
 
 		public void printCube()
 		{
+			System.out.println();
 			for(Face face: faces)
 			{
 				face.printFace();
@@ -233,11 +197,42 @@ public class Cube
 			}
 		}
 
+		public void printSide(String color)
+		{
+			switch(color)
+			{
+				case "W":
+					System.out.println("White - Front Face");
+					front.printFace();
+					break;
+				case "G":
+					System.out.println("Green - Left Face");
+					left.printFace();
+					break;
+				case "Y":
+					System.out.println("Yellow - Back Face");
+					back.printFace();
+					break;
+				case "BL":
+					System.out.println("Blue - Right Face");
+					right.printFace();
+					break;
+				case "O":
+					System.out.println("Orange - Top Face");
+					top.printFace();
+					break;
+				case "RED":
+					System.out.println("Red - Bottom Face");
+					bottom.printFace();
+					break;
+			}
+		}
+
 		public void move(String move)
 		{
 			//U move and D moves can use the regular set.side as its 0-0, 1-1, and 2-2. Other moves, such as r, will have to use some 0-2, 1-1, 2-0
 			
-			if(move == "u")
+			if(move == "U")
 			{
 				String[] topOfLeft = left.getSide("T");	//Need one of the sides to be temp
 
@@ -251,7 +246,7 @@ public class Cube
 				rotateFace(top, true);
 
 			}
-			else if (move == "u'")
+			else if (move == "U'")
 			{
 				String[] topOfLeft = left.getSide("T");
 				left.setSide("T", back.getSide("T"), true);
@@ -262,7 +257,7 @@ public class Cube
 				rotateFace(top, false);
 
 			}
-			else if(move == "d")
+			else if(move == "D")
 			{
 				String [] bottomFront = front.getSide("B");
 				
@@ -272,7 +267,7 @@ public class Cube
 				right.setSide("B", bottomFront, true);
 				rotateFace(bottom, true);
 			}
-			else if(move == "d'")
+			else if(move == "D'")
 			{
 				String [] bottomFront = front.getSide("B");
 				
@@ -284,7 +279,7 @@ public class Cube
 				rotateFace(bottom, false);
 			}
 
-			else if(move == "r")
+			else if(move == "R")
 			{
 				String [] rightOfFront = front.getSide("R");
 
@@ -295,7 +290,7 @@ public class Cube
 
 				rotateFace(right, true);
 			}
-			else if(move == "r'")
+			else if(move == "R'")
 			{
 				String [] rightOfFront = front.getSide("R");
 
@@ -307,7 +302,7 @@ public class Cube
 				rotateFace(right, false);
 			}
 			
-			else if(move == "l")
+			else if(move == "L")
 			{
 				String [] leftOfFront = front.getSide("L");
 
@@ -319,7 +314,7 @@ public class Cube
 				rotateFace(left, true);
 
 			}
-			else if(move == "l'")
+			else if(move == "L'")
 			{
 				String [] leftOfFront = front.getSide("L");
 				front.setSide("L", bottom.getSide("L"), true);
@@ -329,7 +324,7 @@ public class Cube
 				rotateFace(left, false);
 			}
 			
-			else if (move == "f")
+			else if (move == "F")
 			{
 				String[] rightOfLeft = left.getSide("R");
 				left.setSide("R", bottom.getSide("T"), true);
@@ -338,7 +333,7 @@ public class Cube
 				top.setSide("B", rightOfLeft, false);
 				rotateFace(front, true);
 			}
-			else if(move == "f'")
+			else if(move == "F'")
 			{
 				String[] rightOfLeft = left.getSide("R");
 				left.setSide("R", top.getSide("B"), false);
@@ -347,7 +342,7 @@ public class Cube
 				bottom.setSide("T", rightOfLeft, true);
 				rotateFace(front, false);
 			}
-			else if (move == "b")
+			else if (move == "B")
 			{
 				String[] rightOfRight = right.getSide("R");
 				right.setSide("R", bottom.getSide("B"), false);
@@ -357,7 +352,7 @@ public class Cube
 				
 				rotateFace(back, true);
 			}
-			else if(move == "b'")
+			else if(move == "B'")
 			{
 				String[] rightOfRight = right.getSide("R");
 				right.setSide("R", top.getSide("T"), true);
@@ -377,78 +372,148 @@ public class Cube
 		//Add some get/set functions for each face
 	}
 
+	static void solveCube(ArrayList<String> pastMoves)
+	{
+		System.out.println("\nMoves to complete cube: ");
+		for(int i = pastMoves.size() - 1; i >= 0; i--)
+		{
+			System.out.println(pastMoves.get(i));
+		}
+		System.out.println();
+	}
+
 
 	public static void main(String[] args) {
 		RubiksCube cube = new RubiksCube();
-		cube.printCube();
-		//System.out.println("-----------------------------------------------------------");
-		//cube.move("l'");
-		//cube.printCube();
-		//System.out.println("-----------------------------------------------------------");
-		cube.move("b'");
-		//cube.printCube();
-		System.out.println("-----------------------------------------------------------");
-		cube.move("u");
-		cube.printCube();
+		ArrayList<String> moves = new ArrayList<>();
 
+		if(args.length != 0)	//Command line inputs are being used
+		{
+			for(String move : args)
+			{
+				String m = move.toUpperCase();
+				System.out.println(m);
+				cube.move(m);
+				if(m.contains("'"))
+				{
+					char step = m.charAt(0);	//if its a prime (R', L', etc.) move, grab the first character in the string (R, L) and add that to moves
+					String choice = Character.toString(step);
+					moves.add(choice);
+				}
+				else
+				{
+					String addMove = m + "'";
+					moves.add(addMove);
+				}
+			}
+			cube.printCube();
+			solveCube(moves);
+			System.exit(0);
+
+		}
+		else
+		{
+			Scanner scn = new Scanner(System.in);
+			
+			while(true)
+			{
+				System.out.println("Please enter a move {D, U, L, R, F, B, D', U', etc.}\nEnter CUBE to see the current state of the cube or enter a color (W, G, Y, BL, O, RED) to see a specific side\nEnter X to quit.\n");
+				String input = scn.nextLine();
+
+				switch(input.toUpperCase())
+				{
+					case "CUBE":
+						cube.printCube();
+						break;
+					
+					case "U":
+						cube.move("U");
+						moves.add("U'");	//add the opposite move to our moves list, that way we know how to solve the cube
+						break;
+					case "D":
+						cube.move("D");
+						moves.add("D'");
+						break;
+					case "R":
+						cube.move("R");
+						moves.add("R'");
+						break;
+					case "L":
+						cube.move("L");
+						moves.add("L'");	
+						break;
+					case "F":
+						cube.move("F");
+						moves.add("F'");
+						break;
+					case "B":
+						cube.move("B");
+						moves.add("B'");
+						break;
+					case "U'":
+						cube.move("U'");
+						moves.add("U");
+						break;
+					case "D'":
+						cube.move("D'");
+						moves.add("D");
+						break;
+					case "R'":
+						cube.move("R'");
+						moves.add("R");
+						break;
+					case "L'":
+						cube.move("L'");
+						moves.add("L");
+						break;
+					case "F'":
+						cube.move("F'");
+						moves.add("F");
+						break;
+					case "B'":
+						cube.move("B'");
+						moves.add("B");
+						break;
+					case "X":
+						scn.close();
+						System.exit(0);
+						break;
+					case "W":
+						cube.printSide("W");
+						break;
+					case "Y":
+						cube.printSide("Y");
+						break;
+					case "G":
+						cube.printSide("G");
+						break;
+					case "BL":
+						cube.printSide("BL");
+						break;
+					case "O":
+						cube.printSide("O");
+						break;
+					case "RED":
+						cube.printSide("RED");
+						break;
+					default:
+						System.out.println("Please enter a valid move");
+						break;
+
+				}
+				solveCube(moves);
+
+			}
 
 
 	}
-
-
-
-
-
-
-ArrayList<String> moves = new ArrayList<>();
+	}
 }
+
 
 /*
 
-static void solveCube(ArrayList<String> pastMoves)
-{
-	for(int i = pastMoves.size - 1; i >= 0; i--)
-	{
-		System.out.println(pastMoves.get(i));
-	}
-	System.out.println(;)
-}
 
-ArrayList<String> moves = new ArrayList<>();
- while(true)
- {
-	System.out.println("Please enter a move {D, U, L, R, F, B}");
-	String input = scn.nextLine();
-	switch(input.toUpperCase())
-	{
-		case "U":
-			moves.add("U'")	//add the opposite move to our moves list, that way we know how to solve the cube
-			break;
-		case "D":
-			break;
-		case "R":
-			break;
-		case "L":
-			break;
-		case "F":
-			break;
-		case "B":
-			break;
-		case "U'":
-			break;
-		case "D'":
-			break;
-		case "R'":
-			break;
-		case "L'":
-			break;
-		case "F'":
-			break;
-		case "B'":
-			break;
-		default:
-			System.out.println("Please enter a valid move")
 
-	}
- }
+
  */
