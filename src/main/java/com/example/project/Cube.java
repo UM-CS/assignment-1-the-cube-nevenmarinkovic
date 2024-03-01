@@ -167,7 +167,7 @@ public class Cube
 			{
 				String[] topOfLeft = left.getSide("T");	//Need one of the sides to be temp
 
-				
+				//.out.println("")
 				left.setSide("T", front.getSide("T"));
 				front.setSide("T", right.getSide("T"));
 				right.setSide("T", back.getSide("T"));
@@ -196,7 +196,7 @@ public class Cube
 
 				front.setSide("R", bottom.getSide("R"));
 				bottom.setSide("R", back.getSide("R"));
-				back.setSide("R", top.getSide("R"));
+				back.setSide("L", top.getSide("R"));
 				top.setSide("R", rightOfFront);
 
 				rotateFace(right, true);
@@ -208,7 +208,7 @@ public class Cube
 
 				front.setSide("L", top.getSide("L"));
 				top.setSide("L", back.getSide("R"));
-				back.setSide("R", bottom.getSide("R"));
+				back.setSide("R", bottom.getSide("L"));
 				bottom.setSide("L", leftOfFront);
 
 				rotateFace(left, true);
@@ -225,13 +225,13 @@ public class Cube
 		RubiksCube cube = new RubiksCube();
 		cube.printCube();
 		System.out.println("-----------------------------------------------------------");
-		cube.move("l");
-		cube.printCube();
-		System.out.println("-----------------------------------------------------------");
-		cube.move("u");
-		cube.printCube();
-		System.out.println("-----------------------------------------------------------");
 		cube.move("r");
+		//cube.printCube();
+		//System.out.println("-----------------------------------------------------------");
+		cube.move("r");
+		//cube.printCube();
+		//System.out.println("-----------------------------------------------------------");
+		cube.move("d");
 		cube.printCube();
 
 
