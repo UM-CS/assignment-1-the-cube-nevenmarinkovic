@@ -295,6 +295,17 @@ public class Cube
 
 				rotateFace(right, true);
 			}
+			else if(move == "r'")
+			{
+				String [] rightOfFront = front.getSide("R");
+
+				front.setSide("R", top.getSide("R"), true);
+				top.setSide("R", back.getSide("L"), false);
+				back.setSide("L", bottom.getSide("R"), false);
+				bottom.setSide("R", rightOfFront, true);
+
+				rotateFace(right, false);
+			}
 			
 			else if(move == "l")
 			{
@@ -307,6 +318,15 @@ public class Cube
 
 				rotateFace(left, true);
 
+			}
+			else if(move == "l'")
+			{
+				String [] leftOfFront = front.getSide("L");
+				front.setSide("L", bottom.getSide("L"), true);
+				bottom.setSide("L", back.getSide("R"), false);
+				back.setSide("R", top.getSide("L"), false);
+				top.setSide("L", leftOfFront, true);
+				rotateFace(left, false);
 			}
 			
 			else if (move == "f")
@@ -342,13 +362,13 @@ public class Cube
 		RubiksCube cube = new RubiksCube();
 		cube.printCube();
 		//System.out.println("-----------------------------------------------------------");
-		cube.move("d'");
+		//cube.move("l'");
 		//cube.printCube();
 		//System.out.println("-----------------------------------------------------------");
-		cube.move("u'");
+		cube.move("l");
 		//cube.printCube();
 		System.out.println("-----------------------------------------------------------");
-		cube.move("l");
+		cube.move("l'");
 		cube.printCube();
 
 
