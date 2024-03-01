@@ -1,5 +1,7 @@
 package com.example.project;
 
+import java.util.ArrayList;
+
 public class Cube
 {
 
@@ -14,12 +16,13 @@ public class Cube
 			//Loop through and assign each cube of this face to be whatever val is
 			for(int i = 0; i < cubes.length; i++)
 			{
-				cubes[i] = val;
+				cubes[i] = val + i;
 			}
 		}
 
 		public void printFace()
 		{
+			System.out.println(position);
 			int count = 0;
 			for(int i = 0; i < cubes.length; i++)
 			{
@@ -68,33 +71,65 @@ public class Cube
 			return toReturn;
 		}
 
-		public void setSide(String side, String[] toAdd)
+		public void setSide(String side, String[] toAdd, boolean regular)
 		{
-			switch(side)
+			if(regular)
 			{
-				case "T":
-					cubes[0] = toAdd[0];
-					cubes[1] = toAdd[1];
-					cubes[2] = toAdd[2];
-					break;
-				case "L":
-					cubes[0] = toAdd[0];
-					cubes[3] = toAdd[1];
-					cubes[6] = toAdd[2];
-					break;
-				case "R":
-					cubes[2] = toAdd[0];
-					cubes[5] = toAdd[1];
-					cubes[8] = toAdd[2];
-					break;
-				case "B":
-					cubes[6] = toAdd[0];
-					cubes[7] = toAdd[1];
-					cubes[8] = toAdd[2];
-					break;
-				default:
-					System.out.println("Something went wrong...");
+				switch(side)
+				{
+					case "T":
+						cubes[0] = toAdd[0];
+						cubes[1] = toAdd[1];
+						cubes[2] = toAdd[2];
+						break;
+					case "L":
+						cubes[0] = toAdd[0];
+						cubes[3] = toAdd[1];
+						cubes[6] = toAdd[2];
+						break;
+					case "R":
+						cubes[2] = toAdd[0];
+						cubes[5] = toAdd[1];
+						cubes[8] = toAdd[2];
+						break;
+					case "B":
+						cubes[6] = toAdd[0];
+						cubes[7] = toAdd[1];
+						cubes[8] = toAdd[2];
+						break;
+					default:
+						System.out.println("Something went wrong...");
+				}
 			}
+			else
+			{
+				switch(side)
+				{
+					case "T":
+						cubes[0] = toAdd[2];
+						cubes[1] = toAdd[1];
+						cubes[2] = toAdd[0];
+						break;
+					case "L":
+						cubes[0] = toAdd[2];
+						cubes[3] = toAdd[1];
+						cubes[6] = toAdd[0];
+						break;
+					case "R":
+						cubes[2] = toAdd[2];
+						cubes[5] = toAdd[1];
+						cubes[8] = toAdd[0];
+						break;
+					case "B":
+						cubes[6] = toAdd[2];
+						cubes[7] = toAdd[1];
+						cubes[8] = toAdd[0];
+						break;
+					default:
+						System.out.println("Something went wrong...");
+				}
+			}
+			
 		}
 
 		//If the rotation is clockwise, left side -> top side OR right side -> bottom side (top[0] = left [2], top[1] = left[1], top[2] = left[0])
@@ -164,10 +199,10 @@ public class Cube
 			*/
 			if(clockwise)
 			{
-				f.rotateSetSide("T", left, true);
-				f.rotateSetSide("R", top, true);
-				f.rotateSetSide("B", right, true);
-				f.rotateSetSide("L", bottom, true);
+				f.setSide("T", left, false);
+				f.setSide("R", top, true);
+				f.setSide("B", right, false);
+				f.setSide("L", bottom, true);
 				/* 
 				String [] newTop = f.getSide("T");
 				String [] newLeft = f.getSide("L");
@@ -181,10 +216,10 @@ public class Cube
 			}
 			else
 			{
-				f.setSide("T", right);
-				f.setSide("R", bottom);
-				f.setSide("B", left);
-				f.setSide("L", top);
+				f.setSide("T", right, true);
+				f.setSide("R", bottom, false);
+				f.setSide("B", left, true);
+				f.setSide("L", top, false);
 			}
 
 		}
@@ -200,17 +235,17 @@ public class Cube
 
 		public void move(String move)
 		{
-			
+			//U move and D moves can use the regular set.side as its 0-0, 1-1, and 2-2. Other moves, such as r, will have to use some 0-2, 1-1, 2-0
 			
 			if(move == "u")
 			{
 				String[] topOfLeft = left.getSide("T");	//Need one of the sides to be temp
 
 				//.out.println("")
-				left.setSide("T", front.getSide("T"));
-				front.setSide("T", right.getSide("T"));
-				right.setSide("T", back.getSide("T"));
-				back.setSide("T", topOfLeft);
+				left.setSide("T", front.getSide("T"), true);
+				front.setSide("T", right.getSide("T"), true);
+				right.setSide("T", back.getSide("T"), true);
+				back.setSide("T", topOfLeft, true);
 
 				//Rotate the top
 				rotateFace(top, true);
@@ -220,10 +255,10 @@ public class Cube
 			{
 				String [] bottomFront = front.getSide("B");
 				
-				front.setSide("B", left.getSide("B"));
-				left.setSide("B", back.getSide("B"));
-				back.setSide("B", right.getSide("B"));
-				right.setSide("B", bottomFront);
+				front.setSide("B", left.getSide("B"), true);
+				left.setSide("B", back.getSide("B"), true);
+				back.setSide("B", right.getSide("B"), true);
+				right.setSide("B", bottomFront, true);
 				
 
 				rotateFace(bottom, true);
@@ -234,27 +269,27 @@ public class Cube
 			{
 				String [] rightOfFront = front.getSide("R");
 
-				front.setSide("R", bottom.getSide("R"));
-				bottom.setSide("R", back.getSide("R"));
-				back.setSide("L", top.getSide("R"));
-				top.setSide("R", rightOfFront);
+				front.setSide("R", bottom.getSide("R"), true);
+				bottom.setSide("R", back.getSide("L"), false);
+				back.setSide("L", top.getSide("R"), false);
+				top.setSide("R", rightOfFront, true);
 
 				rotateFace(right, true);
 			}
-
+			
 			else if(move == "l")
 			{
 				String [] leftOfFront = front.getSide("L");
 
-				front.setSide("L", top.getSide("L"));
-				top.setSide("L", back.getSide("R"));
-				back.setSide("R", bottom.getSide("L"));
-				bottom.setSide("L", leftOfFront);
+				front.setSide("L", top.getSide("L"), true);
+				top.setSide("L", back.getSide("R"), false);
+				back.setSide("R", bottom.getSide("L"), false);
+				bottom.setSide("L", leftOfFront, true);
 
 				rotateFace(left, true);
 
 			}
-
+			/*
 			else if (move == "f")
 			{
 				String[] rightOfLeft = left.getSide("R");
@@ -266,6 +301,7 @@ public class Cube
 
 				rotateFace(front, true);
 			}
+			*/
 
 		}
 
@@ -277,13 +313,13 @@ public class Cube
 		RubiksCube cube = new RubiksCube();
 		cube.printCube();
 		//System.out.println("-----------------------------------------------------------");
-		//cube.move("f");
+		cube.move("l");
 		//cube.printCube();
 		//System.out.println("-----------------------------------------------------------");
-		//cube.move("f");
+		cube.move("d");
 		//cube.printCube();
 		System.out.println("-----------------------------------------------------------");
-		cube.move("d");
+		cube.move("r");
 		cube.printCube();
 
 
@@ -295,5 +331,55 @@ public class Cube
 
 
 
-
+ArrayList<String> moves = new ArrayList<>();
 }
+
+/*
+
+static void solveCube(ArrayList<String> pastMoves)
+{
+	for(int i = pastMoves.size - 1; i >= 0; i--)
+	{
+		System.out.println(pastMoves.get(i));
+	}
+	System.out.println(;)
+}
+
+ArrayList<String> moves = new ArrayList<>();
+ while(true)
+ {
+	System.out.println("Please enter a move {D, U, L, R, F, B}");
+	String input = scn.nextLine();
+	switch(input.toUpperCase())
+	{
+		case "U":
+			moves.add("U'")	//add the opposite move to our moves list, that way we know how to solve the cube
+			break;
+		case "D":
+			break;
+		case "R":
+			break;
+		case "L":
+			break;
+		case "F":
+			break;
+		case "B":
+			break;
+		case "U'":
+			break;
+		case "D'":
+			break;
+		case "R'":
+			break;
+		case "L'":
+			break;
+		case "F'":
+			break;
+		case "B'":
+			break;
+		default:
+			System.out.println("Please enter a valid move")
+
+	}
+ }
+ */
