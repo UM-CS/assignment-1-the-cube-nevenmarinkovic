@@ -97,6 +97,27 @@ public class Cube
 			}
 		}
 
+		private void rotateSetSide(String side, String[] add, boolean clockwise)
+		{
+			switch(side)
+			{
+				case "T":
+					if(clockwise)
+					{
+						cubes[0] = add[2];
+						cubes[1] = add[1];
+						cubes[2] = add[0];
+					}
+					else
+					{
+						cubes[0] = add[0];
+						cubes[1] = add[1];
+						cubes[2] = add[2];
+					}
+					
+			}
+		}
+
 
 	}
 
@@ -133,12 +154,28 @@ public class Cube
 			String [] left = f.getSide("L");
 			String [] right = f.getSide("R");
 			String [] bottom = f.getSide("B");
+			/*
+			System.out.println("Top Cubes: " + top[0] + top[1] + top[2]);
+			System.out.println("Left Cubes: " + left[0]+ left[1] + left[2]);
+			System.out.println("Right Cubes: " + right[0] + right[1] + right[2]);
+			System.out.println("Bottom Cubes: " + bottom[0] + bottom[1] + bottom[2]);
+			*/
 			if(clockwise)
 			{
-				f.setSide("T", left);
-				f.setSide("R", top);
-				f.setSide("B", right);
-				f.setSide("L", bottom);
+				f.rotateSetSide("T", left, true);
+				f.rotateSetSide("R", top, true);
+				f.rotateSetSide("B", right, true);
+				f.rotateSetSide("L", bottom, true);
+				/* 
+				String [] newTop = f.getSide("T");
+				String [] newLeft = f.getSide("L");
+				String [] newRight = f.getSide("R");
+				String [] newBottom = f.getSide("B");
+				System.out.println("Top Cubes: " + newTop[0] + newTop[1] + newTop[2]);
+				System.out.println("Left Cubes: " + newLeft[0]+ newLeft[1] + newLeft[2]);
+				System.out.println("Right Cubes: " + newRight[0] + newRight[1] + newRight[2]);
+				System.out.println("Bottom Cubes: " + newBottom[0] + newBottom[1] + newBottom[2]);
+				*/
 			}
 			else
 			{
@@ -185,6 +222,7 @@ public class Cube
 				left.setSide("B", back.getSide("B"));
 				back.setSide("B", right.getSide("B"));
 				right.setSide("B", bottomFront);
+				
 
 				rotateFace(bottom, true);
 
@@ -215,6 +253,18 @@ public class Cube
 
 			}
 
+			else if (move == "f")
+			{
+				String[] rightOfLeft = left.getSide("R");
+				left.setSide("R", bottom.getSide("T"));
+				bottom.setSide("T", right.getSide("L"));
+				right.setSide("L", top.getSide("B"));
+				top.setSide("B", rightOfLeft);
+				
+
+				rotateFace(front, true);
+			}
+
 		}
 
 		//Add some get/set functions for each face
@@ -224,13 +274,13 @@ public class Cube
 	public static void main(String[] args) {
 		RubiksCube cube = new RubiksCube();
 		cube.printCube();
+		//System.out.println("-----------------------------------------------------------");
+		//cube.move("f");
+		//cube.printCube();
+		//System.out.println("-----------------------------------------------------------");
+		//cube.move("f");
+		//cube.printCube();
 		System.out.println("-----------------------------------------------------------");
-		cube.move("r");
-		//cube.printCube();
-		//System.out.println("-----------------------------------------------------------");
-		cube.move("r");
-		//cube.printCube();
-		//System.out.println("-----------------------------------------------------------");
 		cube.move("d");
 		cube.printCube();
 
