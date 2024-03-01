@@ -97,6 +97,8 @@ public class Cube
 			}
 		}
 
+		//If the rotation is clockwise, left side -> top side OR right side -> bottom side (top[0] = left [2], top[1] = left[1], top[2] = left[0])
+		//if the rotation is counterclockwise, top side -> left side OR bottom side -> right side (left[0] = top[2], left[1] = top[1], left[2] = top[0])
 		private void rotateSetSide(String side, String[] add, boolean clockwise)
 		{
 			switch(side)
