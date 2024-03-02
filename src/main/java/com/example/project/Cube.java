@@ -1,3 +1,20 @@
+/*Neven Marinkovic
+3/2/2024
+CSCI 152: The Cube
+The goal of this assignment was to model a Rubiks cube in the command line. Specifically, to be able to make valid moves on the cube and print out the cube, as well as keeping track of the moves
+needed to solve the cube. I took a class approach to this assignment, utilizing a RubiksCube and Face class. 
+
+The Face class has a position name which is a combination of the color and respective side of that face (ex: White - Front Face or Orange - Top Face). The face class also has a 9 element string 
+array that stores all 9 of the cubes. The face class implements functions like printFace, getSide, and setSide, which are discussed in greater detail below.
+
+The RubiksCube class represents the cube as a whole and implements 6 Face objects as such. The RubiksCube class has functions like move, rotate face, print cube, and print side, which are
+discussed in greater detail below.
+
+This program has 2 modes. The first mode is with command line arguments. The user runs the program like: ...'come.example.project.Cube' D "R'" U to run those moves on the cube, the program
+will make those moves on the cube, print out the cube state, and then print out the moves needed to solve the cube before exiting. The other mode is without command line arguments. The user
+is prompted to enter commands to be done. These commands could be to make a move on the cube, print out the whole cube, print out a specific side, or randomize the cube.
+ */
+
 package com.example.project;
 
 import java.util.ArrayList;
@@ -23,6 +40,7 @@ public class Cube
 			}
 		}
 
+		//This function prints out the name of the face before looping through each cube in the face and printing it 
 		public void printFace()
 		{
 			System.out.println(position);
@@ -42,11 +60,23 @@ public class Cube
 			}
 		}
 
+		/*getSide takes in a String side. The possible sides are T, L, R, B. This function returns the side of a face, see the diagram below:
+		Face implementation:
+		[
+			0, 1, 2
+			3, 4, 5
+			6, 7, 8
+		]
+		[0, 1, 2] represent the top of the face. [0, 3, 6] represent the left side of the face. [2, 5, 8] represent the right side of the face. And, [6, 7, 8] represent the bottom of the face
+		This function returns a string array of 3 elements which represent either the top, left, right, or bottom sides of a given face
+		This function is used alongside setSide to make moves on the cube
+		*/
 		public String[] getSide(String side)
 		{
 			String[] toReturn = new String[3];
 			switch(side)
 			{
+				//Return the top of the face
 				case "T":
 					toReturn[0] = cubes[0];
 					toReturn[1] = cubes[1];
@@ -74,6 +104,18 @@ public class Cube
 			return toReturn;
 		}
 
+		/*setSide takes in an array of 3 string elements (a side of a face) and sets it equal to whatever side we want to change. This function is used alongside getSide to make moves on the 
+		cube and adjust the cubes accordingly. 
+		The boolean regular is used to verify if the move we are trying to make is a regular (cubes[0] - toAdd[0], cubes[1] - toAdd[1], cubes[2] - toAdd[2]) move or not.
+		The way i implemented the rubiks cube in this program looks at each face from a forward view. With each move, one side of one face is assigned to a side on another face. 
+		let's take the L' move for example. The left side of the front face moves to the left side of the top face. The left side of the top face moves to the RIGHT side of the back face,
+		The right side of the back face moves to the left side of the bottom face, and the left side of the bottom face moves to the left side of the front face.
+		When setting sides, your really assigning each cube of a 3 cube side to another 3 cube side. Sometimes, the cubes within the sides match up nicely (ex: the U move). What I mean is that,
+		cubes 0, 1, 2 from the front side go to cubes 0, 1, 2 on the left side and so on. This is what I call a regular move. There are some moves, like the left side of the top face moving to
+		the right side of the back face where the transition is not regular. Cubes 0, 3, 6 from the top side are now being set to cubes 2, 5, 8 on the back side. The first cube from the top side
+		is set as the LAST cube on the back side (0 -> 8), the middle one remains constant (2 -> 5), and the last cube on the top side is set to the first cube on the back side (6 -> 2). These
+		are what i classify as irregular transitions as the first cube in one side is not set to the first cube on another side. 
+		 */
 		public void setSide(String side, String[] toAdd, boolean regular)
 		{
 			if(regular)
@@ -147,6 +189,7 @@ public class Cube
 		private Face bottom;
 		private Face[] faces = new Face[6];
 
+		//Constructor for the cube 
 		public RubiksCube()
 		{
 			front = new Face("White - Front Face","w");
@@ -164,6 +207,7 @@ public class Cube
 
 		}
 
+		//This function shifts the sides of a given face around depending on the direction given
 		public void rotateFace(Face f, boolean clockwise)
 		{
 			String [] top = f.getSide("T");
@@ -388,7 +432,7 @@ public class Cube
 	static ArrayList<String> randomizeCube(RubiksCube cube)
 	{
 		Random random = new Random();
-		int ranNum = random.nextInt(10);
+		int ranNum = random.nextInt(10) + 1;
 		ArrayList<String> movesToComplete = new ArrayList<>();
 
 		String[] moves = {"U", "U'", "R", "R'", "D", "D'", "L", "L'", "F'", "F", "B", "B'"};
