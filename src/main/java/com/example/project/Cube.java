@@ -373,17 +373,16 @@ public class Cube
 
 	static void solveCube(ArrayList<String> pastMoves)
 	{
-		System.out.println("\nMoves to complete cube: ");
-		for(int i = pastMoves.size() - 1; i >= 0; i--)
-		{
-			System.out.println(pastMoves.get(i));
+		
+			System.out.println("\nMoves to complete cube: ");
+			for(int i = pastMoves.size() - 1; i >= 0; i--)
+			{
+				System.out.println(pastMoves.get(i));
+			}
+			System.out.println();
 		}
-		System.out.println();
-	}
 
 	
-
-
 	public static void main(String[] args) {
 		RubiksCube cube = new RubiksCube();
 		ArrayList<String> moves = new ArrayList<>();
@@ -448,7 +447,6 @@ public class Cube
 						System.out.println("There are no matches for the move entered");
 						break;
 					}
-					
 				}
 
 				cube.printCube();
