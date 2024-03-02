@@ -24,6 +24,7 @@ public class Cube
 
 		public void printFace()
 		{
+			System.out.println(position);
 			int count = 0;
 			for(int i = 0; i < cubes.length; i++)
 			{
@@ -147,12 +148,12 @@ public class Cube
 
 		public RubiksCube()
 		{
-			front = new Face("Front","w");
-			left = new Face("Left", "g");
-			right = new Face("Right","b");
-			back = new Face("Back", "y");
-			top = new Face("Top","o");
-			bottom = new Face("Bottom", "r");
+			front = new Face("White - Front Face","w");
+			left = new Face("Green - Left Face", "g");
+			right = new Face("Blue - Right Face","b");
+			back = new Face("Yellow - Back Face", "y");
+			top = new Face("Orange - Top Face","o");
+			bottom = new Face("Red - Bottom Face", "r");
 			faces[0] = front;
 			faces[1] = left;
 			faces[2] = back;
@@ -231,7 +232,6 @@ public class Cube
 		public void move(String move)
 		{
 			//U move and D moves can use the regular set.side as its 0-0, 1-1, and 2-2. Other moves, such as r, will have to use some 0-2, 1-1, 2-0
-			
 			if(move == "U")
 			{
 				String[] topOfLeft = left.getSide("T");	//Need one of the sides to be temp
@@ -363,13 +363,12 @@ public class Cube
 			}
 			else
 			{
-				System.out.println("\nAn incorrect move has been entered...\n");
+				System.out.println("An incorrect move has been entered...\n");
 			}
 		
 
 		}
 
-		//Add some get/set functions for each face
 	}
 
 	static void solveCube(ArrayList<String> pastMoves)
@@ -382,6 +381,8 @@ public class Cube
 		System.out.println();
 	}
 
+	
+
 
 	public static void main(String[] args) {
 		RubiksCube cube = new RubiksCube();
@@ -389,28 +390,73 @@ public class Cube
 
 		if(args.length != 0)	//Command line inputs are being used
 		{
-			for(String move : args)
-			{
-				String m = move.toUpperCase();
-				System.out.println(m);
-				cube.move(m);
-				if(m.contains("'"))
+			
+				for(int i = 0; i < args.length; i++)
 				{
-					char step = m.charAt(0);	//if its a prime (R', L', etc.) move, grab the first character in the string (R, L) and add that to moves
-					String choice = Character.toString(step);
-					moves.add(choice);
+					String m = args[i].toUpperCase();
+					switch (m)
+					 {
+					case "U":
+						cube.move("U");
+						moves.add("U'");	//add the opposite move to our moves list, that way we know how to solve the cube
+						break;
+					case "D":
+						cube.move("D");
+						moves.add("D'");
+						break;
+					case "R":
+						cube.move("R");
+						moves.add("R'");
+						break;
+					case "L":
+						cube.move("L");
+						moves.add("L'");	
+						break;
+					case "F":
+						cube.move("F");
+						moves.add("F'");
+						break;
+					case "B":
+						cube.move("B");
+						moves.add("B'");
+						break;
+					case "U'":
+						cube.move("U'");
+						moves.add("U");
+						break;
+					case "D'":
+						cube.move("D'");
+						moves.add("D");
+						break;
+					case "R'":
+						cube.move("R'");
+						moves.add("R");
+						break;
+					case "L'":
+						cube.move("L'");
+						moves.add("L");
+						break;
+					case "F'":
+						cube.move("F'");
+						moves.add("F");
+						break;
+					case "B'":
+						cube.move("B'");
+						moves.add("B");
+						break;
+					default:
+						System.out.println("There are no matches for the move entered");
+						break;
+					}
+					
 				}
-				else
-				{
-					String addMove = m + "'";
-					moves.add(addMove);
-				}
-			}
-			cube.printCube();
-			solveCube(moves);
-			System.exit(0);
 
-		}
+				cube.printCube();
+				solveCube(moves);
+				System.exit(0);
+			}
+			
+
 		else
 		{
 			Scanner scn = new Scanner(System.in);
@@ -510,10 +556,3 @@ public class Cube
 	}
 }
 
-
-/*
-
-
-
-
- */
