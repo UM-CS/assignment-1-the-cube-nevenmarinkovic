@@ -233,6 +233,7 @@ public class Cube
 
 		}
 
+		//This function loops through the cube's faces and prints each face
 		public void printCube()
 		{
 			System.out.println();
@@ -243,6 +244,7 @@ public class Cube
 			}
 		}
 
+		//This function takes a color argument and prints out the respective face accordingly
 		public void printSide(String color)
 		{
 			switch(color)
@@ -274,22 +276,28 @@ public class Cube
 			}
 		}
 
+		/*This function takes a string move argument (D, R', F, etc.) and makes a move on the cube accordingly. Each if branch follows the same logic: Grab the desired side from one of the 
+		faces and store it as a temp String[]. Then, starting with that side, assign the desired side a side from the next side in the sequence (use face.setSide and face.getSide). Do this for
+		each of the faces with the last face being set equal to our temp side we initially got. Lastly, rotate the face accordingly. I utilized the diagram in the README as well as this
+		https://rubikscu.be virtual cube to understand how each side is affected on each move.
+
+		I ran out of time, but there is definitely a way to streamline this function. As I said, the logic for each of these is the same, which leads me to believe there is a much more optimized
+		way to handle the moves on the cube.
+		*/
 		
 
 		public void move(String move)
 		{
-			//U move and D moves can use the regular set.side as its 0-0, 1-1, and 2-2. Other moves, such as r, will have to use some 0-2, 1-1, 2-0
+			
 			if(move == "U")
 			{
-				String[] topOfLeft = left.getSide("T");	//Need one of the sides to be temp
+				String[] topOfLeft = left.getSide("T");	
 
-				//.out.println("")
 				left.setSide("T", front.getSide("T"), true);
 				front.setSide("T", right.getSide("T"), true);
 				right.setSide("T", back.getSide("T"), true);
 				back.setSide("T", topOfLeft, true);
 
-				//Rotate the top
 				rotateFace(top, true);
 
 			}
@@ -418,6 +426,8 @@ public class Cube
 
 	}
 
+	//This function takes in a list of string (pastMoves) which are representative of the moves needed to complete the cube. Each time a move is made in the main loop, the opposite move is added
+	//to a list. That list is then passed to this function which prints out all of the "opposite" moves
 	static void solveCube(ArrayList<String> pastMoves)
 	{
 		
@@ -429,6 +439,8 @@ public class Cube
 			System.out.println();
 		}
 
+	//This function loops through a random number of times (1,9) and makes a random move each time. The anti-moves are gotten using the opposite function and are stored in the movesToComplete
+	//list. That list is returned
 	static ArrayList<String> randomizeCube(RubiksCube cube)
 	{
 		Random random = new Random();
@@ -446,6 +458,7 @@ public class Cube
 		return movesToComplete;
 	}
 
+	//This function takes a string move in as an argument. if that move is a prime (ex: R') return the move without the prime (R). Otherwise, add a prime to the move and return that.
 	static String opposite(String s)
 	{
 		if(s.contains("'"))
@@ -460,6 +473,7 @@ public class Cube
 	}
 	
 	public static void main(String[] args) {
+		//Initialize the cube and the moves list to track the anti-moves (needed to solve the cube)
 		RubiksCube cube = new RubiksCube();
 		ArrayList<String> moves = new ArrayList<>();
 
@@ -468,12 +482,13 @@ public class Cube
 			
 				for(int i = 0; i < args.length; i++)
 				{
+					//For each command line argument, perform the move on the cube and add the anti-move to moves.
 					String m = args[i].toUpperCase();
 					switch (m)
 					 {
 					case "U":
 						cube.move("U");
-						moves.add("U'");	//add the opposite move to our moves list, that way we know how to solve the cube
+						moves.add("U'");	
 						break;
 					case "D":
 						cube.move("D");
@@ -525,6 +540,7 @@ public class Cube
 					}
 				}
 
+				//Print out the final state of the cube as well as the steps to solve the cube. Exit the program
 				cube.printCube();
 				solveCube(moves);
 				System.exit(0);
@@ -533,8 +549,11 @@ public class Cube
 
 		else
 		{
+			//This block is the user input option
 			Scanner scn = new Scanner(System.in);
 			
+			//Continue to ask the user for input until they enter x (to quit). Potential commands include any valid move on the cube, printing the whole cube, printing a side of the cube,
+			//or randomizing the cube.
 			while(true)
 			{
 				System.out.println("Please enter a move {D, U, L, R, F, B, D', U', etc.}\nEnter CUBE to see the current state of the cube, enter a color (W, G, Y, BL, O, RED) to see a specific side OR enter RANDOM to randomize the cube\nEnter X to quit.\n");
@@ -548,7 +567,7 @@ public class Cube
 					
 					case "U":
 						cube.move("U");
-						moves.add("U'");	//add the opposite move to our moves list, that way we know how to solve the cube
+						moves.add("U'");	
 						break;
 					case "D":
 						cube.move("D");
@@ -616,6 +635,8 @@ public class Cube
 					case "RED":
 						cube.printSide("RED");
 						break;
+						//If random is selected, randomize the Cube. newMoves is the list of anti-moves stored from the randomizing moves. Add each of these new moves to our existing list
+						//of moves
 					case "RANDOM":
 						ArrayList<String> newMoves = randomizeCube(cube);
 						for(int j = 0; j < newMoves.size(); j++)
