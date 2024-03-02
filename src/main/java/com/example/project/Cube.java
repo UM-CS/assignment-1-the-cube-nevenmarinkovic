@@ -2,6 +2,7 @@ package com.example.project;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Cube
 {
@@ -229,6 +230,8 @@ public class Cube
 			}
 		}
 
+		
+
 		public void move(String move)
 		{
 			//U move and D moves can use the regular set.side as its 0-0, 1-1, and 2-2. Other moves, such as r, will have to use some 0-2, 1-1, 2-0
@@ -382,6 +385,35 @@ public class Cube
 			System.out.println();
 		}
 
+	static ArrayList<String> randomizeCube(RubiksCube cube)
+	{
+		Random random = new Random();
+		int ranNum = random.nextInt(10);
+		ArrayList<String> movesToComplete = new ArrayList<>();
+
+		String[] moves = {"U", "U'", "R", "R'", "D", "D'", "L", "L'", "F'", "F", "B", "B'"};
+		for(int i = 0; i < ranNum; i++)
+		{
+			
+			int move = random.nextInt(12);
+			cube.move(moves[move]);
+			movesToComplete.add(opposite(moves[move]));
+		}
+		return movesToComplete;
+	}
+
+	static String opposite(String s)
+	{
+		if(s.contains("'"))
+		{
+			char first = s.charAt(0);
+			return Character.toString(first);
+		}
+		else
+		{
+			return s + "'";
+		}
+	}
 	
 	public static void main(String[] args) {
 		RubiksCube cube = new RubiksCube();
@@ -461,7 +493,7 @@ public class Cube
 			
 			while(true)
 			{
-				System.out.println("Please enter a move {D, U, L, R, F, B, D', U', etc.}\nEnter CUBE to see the current state of the cube or enter a color (W, G, Y, BL, O, RED) to see a specific side\nEnter X to quit.\n");
+				System.out.println("Please enter a move {D, U, L, R, F, B, D', U', etc.}\nEnter CUBE to see the current state of the cube, enter a color (W, G, Y, BL, O, RED) to see a specific side OR enter RANDOM to randomize the cube\nEnter X to quit.\n");
 				String input = scn.nextLine();
 
 				switch(input.toUpperCase())
@@ -539,6 +571,13 @@ public class Cube
 						break;
 					case "RED":
 						cube.printSide("RED");
+						break;
+					case "RANDOM":
+						ArrayList<String> newMoves = randomizeCube(cube);
+						for(int j = 0; j < newMoves.size(); j++)
+						{
+							moves.add(newMoves.get(j));
+						}
 						break;
 					default:
 						System.out.println("Please enter a valid move");
